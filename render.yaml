@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: resume-tailor-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
