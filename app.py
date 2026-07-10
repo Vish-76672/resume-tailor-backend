@@ -16,7 +16,7 @@ if not GEMINI_API_KEY:
     raise RuntimeError("GEMINI_API_KEY environment variable not set")
 
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-2.5-flash")
+model = genai.GenerativeModel("gemini-3-flash-preview")
 
 
 # --- Resume text extraction ---
@@ -86,6 +86,23 @@ def call_gemini(prompt):
 @app.route("/api/health", methods=["GET"])
 def health():
     return jsonify({"status": "ok"})
+
+
+@app.route("/api/list-models", methods=["GET"])
+def list_models():
+    """Diagnostic route: shows exactly which models this API key/project can call.
+    Safe to remove later, but useful whenever Gemini's model lineup changes and
+    causes 404s on whatever model name is hardcoded above."""
+    try:
+        models = genai.list_models()
+        available = [
+            m.name
+            for m in models
+            if "generateContent" in m.supported_generation_methods
+        ]
+        return jsonify({"available_models": available})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/api/tailor", methods=["POST"])
