@@ -16,7 +16,7 @@ if not GEMINI_API_KEY:
     raise RuntimeError("GEMINI_API_KEY environment variable not set")
 
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-2.0-flash")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 
 # --- Resume text extraction ---
